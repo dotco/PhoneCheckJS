@@ -36,11 +36,9 @@ Loading your webpage with this default code will insert the selected country's c
 
 PhoneCheck validates the input as the user types a character.
 
-Valid input will result in a 'pc-valid'class being added to the input element.
-
-Invalid input will result in a 'pc-invalid' class being added to the input element.
-
-By default, with no input (ie, only the country code), neither class will be present.
+* Valid input will result in a 'pc-valid'class being added to the input element.
+* Invalid input will result in a 'pc-invalid' class being added to the input element.
+* By default, with no input (ie, only the country code - if applicable), neither class will be present.
 
 You may use either class ('pc-valid' or 'pc-invalid') to check the validity of the input in the element and/or style the field appropriately.
 
