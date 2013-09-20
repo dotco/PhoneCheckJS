@@ -64,7 +64,7 @@ PhoneCheck.prototype.validate = function(evt){
 
 	// In the event that there's no reference
 	// example number for the country then
-	// just let allow the input value.
+	// just allow the input value.
 	if(!this.exampleForCountry){
 		this.makeFieldValid(true);
 		return;
