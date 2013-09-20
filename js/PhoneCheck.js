@@ -1,23 +1,38 @@
-var PhoneCheck = function (cellEl, cellCountrycodeEl){
+var PhoneCheck = function (cellEl, cellCountrycodeEl, numberType){
 	this.cellEl = cellEl;
 	this.cellCountrycodeEl = cellCountrycodeEl;
 
+	// Check if the phone number type is supplied
+	// and supported by library. Default to fixed line or mobile.
+	if(numberType.toUpperCase() in i18n.phonenumbers.PhoneNumberType){
+		this.numberType = numberType.toUpperCase();
+	} else {
+		this.numberType = 'FIXED_LINE_OR_MOBILE';
+	}
+
+	// Bind handlers to input/select events.
 	this.setEventListeners();
 	this.phoneLib = i18n.phonenumbers.PhoneNumberUtil.getInstance();
+
+	// Set the initial country code placeholder for the current country.
 	this.setPlaceholder();
 }
 
 PhoneCheck.prototype.setEventListeners = function(){
+	// Validate the input on every key up event in the phone field.
 	$(this.cellEl).on('keyup', $.proxy(this.validate, this));
+
+	// Reset the country code placeholder when a new country
+	// is selected.
 	$(this.cellCountrycodeEl).on('change', $.proxy(this.setPlaceholder, this));
 }
 
 PhoneCheck.prototype.getExample = function(){
+	// Grab an example number of the type specified (whether fixed or mobile, etc...)
+	var example = this.phoneLib.getExampleNumberForType(this.country(), i18n.phonenumbers.PhoneNumberType[this.numberType]);
 
-	var example = this.phoneLib.getExampleNumberForType(this.country(), i18n.phonenumbers.PhoneNumberType.MOBILE);
-
-	console.log(example);
-
+	// If an example number is available, return its parts.
+	// Otherwise return false.
 	if(example && example.values_){
 		return example.values_;
 	}
@@ -26,21 +41,22 @@ PhoneCheck.prototype.getExample = function(){
 
 PhoneCheck.prototype.validate = function(evt){
 	var formattedPhone, naiveCountryForNumber;
-	this.countryCode = this.cellCountrycodeEl.val();
+	this.countryCode = this.country();
 
 	// Check if field is empty/default
 	if(this.cell() == this.cellEl.data('countryCode')){
-		console.log('only country code entered');
 		this.makeFieldValid();
 		return;
-	} else if(this.cell().length < this.cellEl.data('countryCode').length){
-		console.log('needs placeholder to be set');
+	}
+	// Check if the input's length is shorter than the country code placeholder
+	// If it is, remove all validation classes and enforce the country code.
+	else if(this.cell().length < this.cellEl.data('countryCode').length){
 		this.makeFieldValid();
 		this.setPlaceholder();
 		return;
 
 	}
-	// Check if only valid characters exist
+	// Check for invalid characters in the input.
 	 else if(!this.isValidChars(evt)){
 		this.makeFieldValid(false);
 		return;
@@ -48,9 +64,7 @@ PhoneCheck.prototype.validate = function(evt){
 
 	// In the event that there's no reference
 	// example number for the country then
-	// just let allow it.
-	// Can't do much else.
-
+	// just let allow the input value.
 	if(!this.exampleForCountry){
 		this.makeFieldValid(true);
 		return;
@@ -58,7 +72,7 @@ PhoneCheck.prototype.validate = function(evt){
 
 	formattedPhone = formatE164(this.country(), cleanPhone(this.cell()));
 
-	// Get the library's guess at country for the number
+	// Get the library's guess at country for the number input.
 	naiveCountryForNumber = countryForE164Number(formattedPhone);
 
 	try {
@@ -73,32 +87,16 @@ PhoneCheck.prototype.validate = function(evt){
 		}
 
 	} catch (e) {
-		console.log(e);
-		// this.makeFieldValid(false);
+		// Uncomment the line below to view exceptions raised by the 
+		// phone library.
+
+		// console.log(e);
 	}
-	// Ultimately wasn't validated
+	
+	// Since the number hasn't been validated at this point,
+	// it's assumed invalid.
 	this.makeFieldValid(false);
-	return false;
-}
-
-PhoneCheck.prototype.checkFormat = function(){
-	var cur_country_code = this.sanitizedCountryCode();
-
-	countryCodePattern = new RegExp('^' + cur_country_code);
-
-	if(countryCodePattern.test(this.cell())){
-		return;
-	} else {
-		this.cellEl.val(this.cellEl.data('countryCode') + this.cell());
-	}
-}
-
-PhoneCheck.prototype.sanitizedCountryCode = function(){
-	var countryCode;
-
-	return this.cellEl.data('countryCode').replace(/\s/g, '\\s').replace(/\+/g,'\\+');
-
-
+	return;
 }
 
 PhoneCheck.prototype.setPlaceholder = function(){
@@ -114,17 +112,16 @@ PhoneCheck.prototype.setPlaceholder = function(){
 	this.validate();
 }
 
-PhoneCheck.prototype.cell = function(){
-	return this.cellEl.val();
-}
-
-PhoneCheck.prototype.country = function(){
-	return this.cellCountrycodeEl.val();
-}
-
+// Determine if the characters in the input are 
+// valid phone number characters.
 PhoneCheck.prototype.isValidChars = function(evt){
-	var invalidPattern = /[^0-9\(\)\-\+\s]/g;
+	// Create a pattern that will match invalid characters:
+	// ie, anything that is not 0-9, '-', '(', ')', '-', '+',
+	// or spaces.
+	var invalidPattern = new RegExp(/[^0-9\(\)\-\+\s]/g);
 
+	// Check for invalid characters. Return false if found.
+	// Return true otherwise.
 	if(invalidPattern.test(this.cellEl.val())){
 		return false;
 	}
@@ -134,6 +131,17 @@ PhoneCheck.prototype.isValidChars = function(evt){
 	}
 }
 
+// Quick accessor to get input field's value.
+PhoneCheck.prototype.cell = function(){
+	return this.cellEl.val();
+}
+
+// Quick accessor to get selected country's value.
+PhoneCheck.prototype.country = function(){
+	return this.cellCountrycodeEl.val();
+}
+
+// Add/Remove the relevant resulting validation classes.
 PhoneCheck.prototype.makeFieldValid = function(isValid){
 	if(isValid == true){
 		this.cellEl.addClass('valid');
