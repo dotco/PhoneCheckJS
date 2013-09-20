@@ -16,9 +16,11 @@ PhoneCheck.prototype.getExample = function(){
 
 	var example = this.phoneLib.getExampleNumberForType(this.country(), i18n.phonenumbers.PhoneNumberType.MOBILE);
 
-	if(example && example.values_)
-		console.log(example);
+	console.log(example);
+
+	if(example && example.values_){
 		return example.values_;
+	}
 	return false;
 }
 
@@ -44,17 +46,24 @@ PhoneCheck.prototype.validate = function(evt){
 		return;
 	}
 
+	// In the event that there's no reference
+	// example number for the country then
+	// just let allow it.
+	// Can't do much else.
+
+	if(!this.exampleForCountry){
+		this.makeFieldValid(true);
+		return;
+	}
+
 	formattedPhone = formatE164(this.country(), cleanPhone(this.cell()));
-	console.log(formattedPhone);
 
 	// Get the library's guess at country for the number
 	naiveCountryForNumber = countryForE164Number(formattedPhone);
-	console.log(naiveCountryForNumber);
 
 	try {
 
 		var numberProto = this.phoneLib.parse(this.cell().replace(/[^0-9]/,''), this.country());
-		console.log(numberProto);
 
 		if (this.country().toLowerCase() === naiveCountryForNumber.toLowerCase()
 			&& this.phoneLib.isValidNumber(numberProto)
@@ -93,13 +102,11 @@ PhoneCheck.prototype.sanitizedCountryCode = function(){
 }
 
 PhoneCheck.prototype.setPlaceholder = function(){
-	var example = this.getExample(),
+	this.exampleForCountry = this.getExample(),
 		countryCode = '+ ';
 
-	console.log(example);
-
-	if(example){
-		countryCode += example['1'] + ' ';
+	if(this.exampleForCountry){
+		countryCode += this.exampleForCountry['1'] + ' ';
 	}
 
 	this.cellEl.data('countryCode', countryCode);
