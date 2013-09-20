@@ -20,7 +20,7 @@ var PhoneCheck = function (cellEl, cellCountrycodeEl, numberType){
 
 PhoneCheck.prototype.setEventListeners = function(){
 	// Validate the input on every key up event in the phone field.
-	$(this.cellEl).on('keyup', $.proxy(this.validate, this));
+	$(this.cellEl).on('keyup change', $.proxy(this.validate, this));
 
 	// Reset the country code placeholder when a new country
 	// is selected.
@@ -92,7 +92,7 @@ PhoneCheck.prototype.validate = function(evt){
 
 		// console.log(e);
 	}
-	
+
 	// Since the number hasn't been validated at this point,
 	// it's assumed invalid.
 	this.makeFieldValid(false);
@@ -144,12 +144,12 @@ PhoneCheck.prototype.country = function(){
 // Add/Remove the relevant resulting validation classes.
 PhoneCheck.prototype.makeFieldValid = function(isValid){
 	if(isValid == true){
-		this.cellEl.addClass('valid');
-		this.cellEl.removeClass('invalid');
+		this.cellEl.addClass('pc-valid');
+		this.cellEl.removeClass('pc-invalid');
 	} else if(isValid == false) {
-		this.cellEl.addClass('invalid');
-		this.cellEl.removeClass('valid');
+		this.cellEl.addClass('pc-invalid');
+		this.cellEl.removeClass('pc-valid');
 	} else {
-		this.cellEl.removeClass('valid invalid');
+		this.cellEl.removeClass('pc-valid pc-invalid');
 	}
 }

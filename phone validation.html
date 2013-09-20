@@ -4,10 +4,10 @@
 </head>
 <body>
 	<style>
-	.invalid{
+	.pc-invalid{
 		background: red;
 	}
-	.valid{
+	.pc-valid{
 		background: green;
 	}
 </style>
@@ -253,9 +253,9 @@
 		<option value="ZW">Zimbabwe</option>
 	</select>
 	<input type="tel" name="cell">
-	<script type="text/javascript" src="js/PhoneFormat.js"></script>
+	<script type="text/javascript" src="js/libphonenumber.min.js"></script>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/PhoneCheck.js"></script>
+	<script type="text/javascript" src="js/phonecheck.js"></script>
 
 	<script type="text/javascript">
 		new PhoneCheck($('input'), $('select'), 'mobile');
