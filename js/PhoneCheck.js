@@ -1,4 +1,4 @@
-var PhoneValidator = function (cellEl, cellCountrycodeEl){
+var PhoneCheck = function (cellEl, cellCountrycodeEl){
 	this.cellEl = cellEl;
 	this.cellCountrycodeEl = cellCountrycodeEl;
 
@@ -7,12 +7,12 @@ var PhoneValidator = function (cellEl, cellCountrycodeEl){
 	this.setPlaceholder();
 }
 
-PhoneValidator.prototype.setEventListeners = function(){
+PhoneCheck.prototype.setEventListeners = function(){
 	$(this.cellEl).on('keyup', $.proxy(this.validate, this));
 	$(this.cellCountrycodeEl).on('change', $.proxy(this.setPlaceholder, this));
 }
 
-PhoneValidator.prototype.getExample = function(){
+PhoneCheck.prototype.getExample = function(){
 
 	var example = this.phoneLib.getExampleNumberForType(this.country(), i18n.phonenumbers.PhoneNumberType.MOBILE);
 
@@ -22,7 +22,7 @@ PhoneValidator.prototype.getExample = function(){
 	return false;
 }
 
-PhoneValidator.prototype.validate = function(evt){
+PhoneCheck.prototype.validate = function(evt){
 	var formattedPhone, naiveCountryForNumber;
 	this.countryCode = this.cellCountrycodeEl.val();
 
@@ -72,7 +72,7 @@ PhoneValidator.prototype.validate = function(evt){
 	return false;
 }
 
-PhoneValidator.prototype.checkFormat = function(){
+PhoneCheck.prototype.checkFormat = function(){
 	var cur_country_code = this.sanitizedCountryCode();
 
 	countryCodePattern = new RegExp('^' + cur_country_code);
@@ -84,7 +84,7 @@ PhoneValidator.prototype.checkFormat = function(){
 	}
 }
 
-PhoneValidator.prototype.sanitizedCountryCode = function(){
+PhoneCheck.prototype.sanitizedCountryCode = function(){
 	var countryCode;
 
 	return this.cellEl.data('countryCode').replace(/\s/g, '\\s').replace(/\+/g,'\\+');
@@ -92,7 +92,7 @@ PhoneValidator.prototype.sanitizedCountryCode = function(){
 
 }
 
-PhoneValidator.prototype.setPlaceholder = function(){
+PhoneCheck.prototype.setPlaceholder = function(){
 	var example = this.getExample(),
 		countryCode = '+ ';
 
@@ -107,15 +107,15 @@ PhoneValidator.prototype.setPlaceholder = function(){
 	this.validate();
 }
 
-PhoneValidator.prototype.cell = function(){
+PhoneCheck.prototype.cell = function(){
 	return this.cellEl.val();
 }
 
-PhoneValidator.prototype.country = function(){
+PhoneCheck.prototype.country = function(){
 	return this.cellCountrycodeEl.val();
 }
 
-PhoneValidator.prototype.isValidChars = function(evt){
+PhoneCheck.prototype.isValidChars = function(evt){
 	var invalidPattern = /[^0-9\(\)\-\+\s]/g;
 
 	if(invalidPattern.test(this.cellEl.val())){
@@ -127,7 +127,7 @@ PhoneValidator.prototype.isValidChars = function(evt){
 	}
 }
 
-PhoneValidator.prototype.makeFieldValid = function(isValid){
+PhoneCheck.prototype.makeFieldValid = function(isValid){
 	if(isValid == true){
 		this.cellEl.addClass('valid');
 		this.cellEl.removeClass('invalid');
