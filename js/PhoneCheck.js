@@ -76,7 +76,8 @@ PhoneCheck.prototype.validate = function(evt){
 	naiveCountryForNumber = countryForE164Number(formattedPhone);
 
 	try {
-
+		// Remove non-numeric characters and attempt to parse
+		// an instance of the number for the selected country.
 		var numberProto = this.phoneLib.parse(this.cell().replace(/[^0-9]/,''), this.country());
 
 		if (this.country().toLowerCase() === naiveCountryForNumber.toLowerCase()
@@ -116,9 +117,9 @@ PhoneCheck.prototype.setPlaceholder = function(){
 // valid phone number characters.
 PhoneCheck.prototype.isValidChars = function(evt){
 	// Create a pattern that will match invalid characters:
-	// ie, anything that is not 0-9, '-', '(', ')', '-', '+',
+	// ie, anything that is not 0-9, '-', '(', ')', '-', '+', '.'
 	// or spaces.
-	var invalidPattern = new RegExp(/[^0-9\(\)\-\+\s]/g);
+	var invalidPattern = new RegExp(/[^0-9\(\)\-\+\s\.]/g);
 
 	// Check for invalid characters. Return false if found.
 	// Return true otherwise.
@@ -143,13 +144,9 @@ PhoneCheck.prototype.country = function(){
 
 // Add/Remove the relevant resulting validation classes.
 PhoneCheck.prototype.makeFieldValid = function(isValid){
-	if(isValid == true){
-		this.cellEl.addClass('pc-valid');
-		this.cellEl.removeClass('pc-invalid');
-	} else if(isValid == false) {
-		this.cellEl.addClass('pc-invalid');
-		this.cellEl.removeClass('pc-valid');
+	if(typeof isValid != 'undefined'){
+		this.cellEl.toggleClass('pc-valid', isValid).toggleClass('pc-invalid', !isValid);
 	} else {
-		this.cellEl.removeClass('pc-valid pc-invalid');
+		this.cellEl.toggleClass('pc-valid pc-invalid', false);
 	}
 }
