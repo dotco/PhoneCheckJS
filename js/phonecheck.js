@@ -4,7 +4,7 @@ var PhoneCheck = function (cellEl, cellCountrycodeEl, numberType){
 
 	// Check if the phone number type is supplied
 	// and supported by library. Default to fixed line or mobile.
-	numberType = numberType.toUpperCase();
+	numberType = numberType ? numberType.toUpperCase() : '';
 	if(numberType in i18n.phonenumbers.PhoneNumberType){
 		this.numberType = numberType;
 	} else {
