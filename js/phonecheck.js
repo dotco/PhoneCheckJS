@@ -24,10 +24,19 @@ var PhoneCheck = function (cellEl, cellCountrycodeEl, numberType){
 PhoneCheck.prototype.setEventListeners = function(){
 	// Validate the input on every key up event in the phone field.
 	$(this.cellEl).on('keyup change', $.proxy(this.validate, this));
+	$(this.cellEl).on('keydown', $.proxy(this.cursorStay, this));
 
 	// Reset the country code placeholder when a new country
 	// is selected.
 	$(this.cellCountrycodeEl).on('change', $.proxy(this.setPlaceholder, this));
+}
+
+PhoneCheck.prototype.cursorStay = function(e){
+	// Guard against a jumping cursor if the user is trying to erase
+	// the country code.
+	if(e.which == 8 && (this.cellEl.data('countryCode') == e.target.value)){
+		e.preventDefault();
+	}
 }
 
 PhoneCheck.prototype.getExample = function(){
