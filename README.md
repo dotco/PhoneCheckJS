@@ -4,9 +4,9 @@ Why?
 ----
 The internet's got a lot of forms used to get data from users. Sometimes it's helpful to ensure that the data being submitted is legitimate.
 
-[POP.co](http://pop.co), a product of [@dotco](http://go.co), required a useful validation helper for mobile number entry since we were leveraging text messages to handle user validation.
+[POP.co](http://pop.co), a product of [.CO Internet](http://go.co), required a useful validation helper for mobile number entry since we were leveraging text messages to handle user validation.
 
-PhoneCheckJS is the result of wanting to refactor and abstract away the main functionality that was initially implemented on [POP's](http://pop.co) homepage to collect user telephone numbers.
+PhoneCheckJS is the result of wanting to refactor and abstract away the main functionality that was initially implemented on [POP's](http://pop.co) homepage to collect user telephone numbers from multiple countries.
 
 How?
 ----
@@ -14,10 +14,13 @@ To use PhoneCheckJS, you will need to have at least two elements in your markup:
 * Country Field/List (&lt;input&gt; or &lt;select&gt;)
 * Phone Number Field (&lt;input&gt;)
 
-Note: The PhoneCheck and its underlying libphonenumber library (specified in Dependencies) rely on two-letter country codes to validate input.
+Note:
+* The PhoneCheck and its underlying libphonenumber library (specified in Dependencies) rely on two-letter country codes to validate input.
+* Users need to enter their number in its full international format.
 
 
 After including the following depencies (inlcuded in the /js) and PhoneCheckJS:
+
 ```
 <script type="text/javascript" src="js/libphonenumber.min.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -32,7 +35,7 @@ All you need to do is call the PhoneCheck constructor, passing in two jQuery obj
 </script>
 ```
 
-Loading your webpage with this default code will insert the selected country's country code digit in input field. Eg, for the US '+ 1 ' will be in the field. Selecting the United Kingdom (UK) will overwrite the current input to be '+ 44 '.
+Loading your webpage with this default code will insert the selected country's country code digit(s) in the number input field. Eg, for the US '+ 1 ' will be in the field. Selecting the United Kingdom (UK) will overwrite the current input to be '+ 44 '.
 
 PhoneCheck validates the input as the user types a character.
 
@@ -56,6 +59,6 @@ Culprit (Creator)
 ----
 This (hopefully) helpful package was put together by [@mrdazm](http://twitter.com/mrdazm) under MIT license.
 
-Follow [@thePOPguys](http://pop.co) and [@dotco](http://go.co)!
+Follow [@thePOPguys](http://twitter.com/thePOPguys) and [@dotco](http://twitter.com/dotco)!
 
 &copy; 2013 Domain Marketing Ventures

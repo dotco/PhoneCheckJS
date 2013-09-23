@@ -4,8 +4,9 @@ var PhoneCheck = function (cellEl, cellCountrycodeEl, numberType){
 
 	// Check if the phone number type is supplied
 	// and supported by library. Default to fixed line or mobile.
-	if(numberType.toUpperCase() in i18n.phonenumbers.PhoneNumberType){
-		this.numberType = numberType.toUpperCase();
+	numberType = numberType.toUpperCase();
+	if(numberType in i18n.phonenumbers.PhoneNumberType){
+		this.numberType = numberType;
 	} else {
 		this.numberType = 'FIXED_LINE_OR_MOBILE';
 	}
@@ -16,6 +17,8 @@ var PhoneCheck = function (cellEl, cellCountrycodeEl, numberType){
 
 	// Set the initial country code placeholder for the current country.
 	this.setPlaceholder();
+
+	return this;
 }
 
 PhoneCheck.prototype.setEventListeners = function(){
