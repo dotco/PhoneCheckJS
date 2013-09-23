@@ -4,7 +4,7 @@ Why?
 ----
 The internet's got a lot of forms used to get data from users. Sometimes it's helpful to ensure that the data being submitted is legitimate.
 
-[POP.co](http://pop.co), a product of [.CO Internet](http://go.co), required a useful validation helper for mobile number entry since we were leveraging text messages to handle user validation.
+[POP.co](http://pop.co), a product of [.CO](http://go.co), required a useful validation helper for mobile number entry since we were leveraging text messages to handle user validation.
 
 PhoneCheckJS is the result of wanting to refactor and abstract away the main functionality that was initially implemented on [POP's](http://pop.co) homepage to collect user telephone numbers from multiple countries.
 
